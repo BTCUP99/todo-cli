@@ -19,14 +19,11 @@ jobs:
       - name: Create Release Package
         run: |
           mkdir -p dist
-          # 打包 Python 源码
-          tar -czvf dist/todo-cli-v${GITHUB_REF#refs/tags/v}.tar.gz todo.py requirements.txt README.md
-
-      - name: Create zip package
-        run: |
-          cd dist
-          unzip -o ../todo.py ../requirements.txt ../README.md 2>/dev/null || true
-          zip -r todo-cli-v${GITHUB_REF#refs/tags/v}.zip todo.py requirements.txt README.md
+          VERSION=${GITHUB_REF#refs/tags/v}
+          # 创建 tar.gz 包
+          tar -czvf dist/todo-cli-${VERSION}.tar.gz todo.py requirements.txt README.md
+          # 创建 zip 包
+          zip -j dist/todo-cli-${VERSION}.zip todo.py requirements.txt README.md
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
